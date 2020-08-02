@@ -153,12 +153,13 @@
                     }
 
                     document.getElementById('startButton').addEventListener('click', () => {
+                        codeReader.reset()
+                        document.getElementById('result').textContent = '';
+                        
                         codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (result,
                             err) => {
                             if (result) {
-                                codeReader.reset()
-                                document.getElementById('result').textContent = '';
-                                console.log('Reset.')
+                                
                                 console.log(result)
                                 //document.getElementById('result').textContent = result.text
                             }
