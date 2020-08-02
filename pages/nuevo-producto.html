@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <title>TiendaWEB-Nuevo Producto</title>
+</head>
+
+
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="../dashboard.html">Tienda WEB</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" href="./productos.html">Productos</a>
+                <a class="nav-item nav-link" href="./ventas.html">Ventas</a>
+                <a class="nav-item nav-link" href="./clientes.html">Clientes</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-3">
+        <div class="row d-flex justify-content-between mt-3 mb-3 p-3" style="background-color: #71aec0;">
+            <h5 id="usuario">Usuario registrado:</h5>
+            <input type="button" onclick="salir()" class="btn btn-danger" value="CERRAR SESION">
+
+        </div>
+        <h2>Nuevo Producto</h2>
+        <form class="needs-validation" novalidate>
+            <div class="form-row">
+                <div class="col-md-4 mb-3">
+                    <label for="validationCustom01">Nombre</label>
+                    <input type="text" class="form-control" id="nombre" placeholder="Ingrese el nombre del producto"
+                        required>
+                    <div class="invalid-feedback">
+                        Porfavor ingrese un nombre del producto.
+                    </div>
+                    <div class="valid-feedback">
+                        Correcto!
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="validationCustom01">Unidades</label>
+                    <input type="number" class="form-control" id="unidades" placeholder="Ingrese las unidades."
+                        required>
+                    <div class="invalid-feedback">
+                        Porfavor ingrese una cantidad mayor a cero.
+                    </div>
+                    <div class="valid-feedback">
+                        Correcto!
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="validationCustom02">Codigo</label>
+                    <div class="d-flex">
+                        <input type="text" class="form-control" id="codigo" placeholder="Ingresar codigo" required>
+                        <button type="button" class="ml-2 btn btn-warning" data-toggle="modal"
+                            data-target="#exampleModalCenter">
+                            Escanear
+                        </button>
+
+                        <div class="modal fade show" id="exampleModalCenter" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalCenterTitle" aria-modal="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalCenterTitle">Escanear codigo barras y QR
+                                        </h5>
+                                        <button id="cerrarModalCamara" type="button" class="close" data-dismiss="modal"
+                                            aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <div id="sourceSelectPanel" style="display:none">
+                                            <label for="sourceSelect">Eleja camara:</label>
+                                            <select id="sourceSelect" class="dropdown-toggle">
+                                            </select>
+                                        </div>
+                                        <div class="borde" style="border: 1px solid #000;
+                                                border-radius: 10px;
+                                                width: 100%;
+                                                height: 300px;
+                                                display: flex;
+                                                justify-content: center;
+                                                align-content: center;
+                                                overflow: hidden;
+                                                ">
+                                            <video id="video"></video>
+                                        </div>
+                                        <pre><code id="result"></code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="invalid-feedback">
+                        Porfavor ingrese el codigo del producto.
+                    </div>
+                    <div class="valid-feedback">
+                        Correcto!
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-6 mb-3">
+                    <label for="validationCustom04">Marca</label>
+                    <div class="d-flex">
+                        <select class="custom-select" id="marcasSelect" required>
+                            <option selected disabled value="">---</option>
+                        </select>
+                        <button type="button" class="ml-2 btn btn-warning" data-toggle="modal"
+                            data-target="#modalNuevaMarca">
+                            +
+                        </button>
+
+                        <div class="modal fade show" id="modalNuevaMarca" tabindex="-1" role="dialog"
+                            aria-labelledby="modalNuevaMarcaTitle" aria-modal="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalNuevaMarcaTitle">Agregar nueva marca
+                                        </h5>
+                                        <button id="cerrarModalMarca" type="button" class="close" data-dismiss="modal"
+                                            aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Nueva marca</label>
+                                                <input type="text" class="form-control" id="nombreMarca"
+                                                    placeholder="Ingrese una nueva marca." required>
+                                                <div class="invalid-feedback">
+                                                    Porfavor ingrese una marca.
+                                                </div>
+                                                <div class="valid-feedback">
+                                                    Correcto!
+                                                </div>
+                                            </div>
+                                            <input type="button" class="btn btn-primary" onclick="nuevaMarca()"
+                                                value="GUARDAR">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="validationCustom05">Precio Unitario</label>
+                    <input type="number" class="form-control" id="precio" required>
+                    <div class="invalid-feedback">
+                        Porfavor ingresar un precio al producto.
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="col-md-12 mb-3">
+                    <label for="validationTextarea">Descripción</label>
+                    <textarea class="form-control" id="descripcion"
+                        placeholder="Describir el producto detalles."></textarea>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="agregarProducto()">AGREGAR PRODUCTO</button>
+
+        </form>
+
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-auth.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-analytics.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-firestore.js"></script>
+
+
+    <script src="../js/jquery-3.5.1.slim.min.js"></script>
+    <script src="../js/popper.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+
+    <script src="../js/app.js"></script>
+    <script>
+        var marcasSelect = document.getElementById('marcasSelect');
+        db.collection("nombre-marca").get().then((querySnapshot) => {
+            marcasSelect.innerHTML = "";
+            querySnapshot.forEach((doc) => {
+                console.log(`${doc.id} => ${doc.data().nombre}`);
+                var option = document.createElement("option");
+                option.text = doc.data().nombre;
+                marcasSelect.add(option);
+
+            });
+        });
+
+        function nuevaMarca() {
+            var marca = document.getElementById('nombreMarca');
+            if (marca.value != "") {
+                db.collection("nombre-marca").add({
+                        nombre: marca.value
+                    })
+                    .then(function (docRef) {
+                        console.log("Document written with ID: ", docRef.id);
+                        document.getElementById('cerrarModalMarca').click();
+                        marca.value = "";
+
+                        db.collection("nombre-marca").get().then((querySnapshot) => {
+                            marcasSelect.innerHTML = "";
+                            querySnapshot.forEach((doc) => {
+                                console.log(`${doc.id} => ${doc.data().nombre}`);
+                                var option = document.createElement("option");
+                                option.text = doc.data().nombre;
+                                marcasSelect.add(option);
+                            });
+                        });
+
+                    })
+                    .catch(function (error) {
+                        console.error("Error adding document: ", error);
+                    });
+            } else {
+                alert("Campo marca vacio...")
+            }
+
+        }
+
+        function agregarProducto() {
+            var nombre = document.getElementById('nombre');
+            var unidades = document.getElementById('unidades');
+            var codigo = document.getElementById('codigo');
+            var marca = marcasSelect.options[marcasSelect.selectedIndex].text;
+            var precio = document.getElementById('precio');
+            var descripcion = document.getElementById('descripcion');
+            db.collection("producto").add({
+                    codigo: codigo.value,
+                    descripcion: descripcion.value,
+                    marca: marca,
+                    nombre: nombre.value,
+                    precio: parseFloat(precio.value),
+                    unidades: parseInt(unidades.value)
+                })
+                .then(function (docRef) {
+                    console.log("Document written with ID: ", docRef.id);
+
+                    nombre.value = "";
+                    unidades.value = "";
+                    codigo.value = "";
+                    marcasSelect.value = '0';
+                    precio.value = "";
+                    descripcion.value = "";
+
+                    alert("El producto se registro correctamente.")
+                })
+                .catch(function (error) {
+                    console.error("Error adding document: ", error);
+                });
+        }
+    </script>
+    <script src="../js/barcode.min.js"></script>
+    <script type="text/javascript">
+        window.addEventListener('load', function () {
+            let selectedDeviceId;
+            const codeReader = new ZXing.BrowserMultiFormatReader()
+            console.log('ZXing code reader initialized')
+            codeReader.listVideoInputDevices()
+                .then((videoInputDevices) => {
+                    const sourceSelect = document.getElementById('sourceSelect')
+                    selectedDeviceId = videoInputDevices[0].deviceId
+                    if (videoInputDevices.length >= 1) {
+                        videoInputDevices.forEach((element) => {
+                            const sourceOption = document.createElement('option')
+                            sourceOption.text = element.label
+                            sourceOption.value = element.deviceId
+                            sourceSelect.appendChild(sourceOption)
+                        })
+
+                        sourceSelect.onchange = () => {
+                            selectedDeviceId = sourceSelect.value;
+                        };
+
+                        const sourceSelectPanel = document.getElementById('sourceSelectPanel')
+                        sourceSelectPanel.style.display = 'block'
+                    }
+                    codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (result,
+                        err) => {
+                        if (result) {
+                            console.log(result)
+                            document.getElementById('codigo').value = result.text
+                            document.getElementById('cerrarModalCamara').click();
+                        }
+                        if (err && !(err instanceof ZXing.NotFoundException)) {
+                            console.error(err)
+                            alert(err);
+                            //document.getElementById('codigo').textContent = err
+                        }
+                    });
+
+                })
+                .catch((err) => {
+                    console.error(err)
+                })
+        })
+    </script>
+</body>
+
+</html>

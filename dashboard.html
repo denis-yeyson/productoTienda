@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <title>TiendaWEB</title>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Tienda WEB</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" href="./pages/productos.html">Productos</a>
+                <a class="nav-item nav-link" href="./pages/ventas.html">Ventas</a>
+                <a class="nav-item nav-link" href="./pages/clientes.html">Clientes</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+
+        <div class="row d-flex justify-content-between mt-3 mb-3 p-3" style="background-color: #71aec0;">
+            <h5 id="usuario">Usuario registrado:</h5>
+            <input type="button" onclick="salir()" class="btn btn-danger" value="CERRAR SESION">
+
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Nueva Venta +</h5>
+                        <p class="card-text">Realizar nueva Venta simple.</p>
+                        <a href="./pages/new-venta.html" class="btn btn-primary">Ir -></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Nuevo Producto</h5>
+                        <p class="card-text">Agregar un nuevo producto a la tienda.</p>
+                        <a href="./pages/nuevo-producto.html" class="btn btn-primary">Ir -></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Escanear Producto</h5>
+                        <p class="card-text">Consultar un producto con codigo QR o codigo de barras.</p>
+                        <a href="./pages/escanear.html" class="btn btn-primary">Ir -></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-auth.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-analytics.js"></script>
+
+    <script src="./js/jquery-3.5.1.slim.min.js"></script>
+    <script src="./js/popper.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyDfcu6Hl_ox9ilndt6ZT3SyT6qaFGCkLTQ",
+            authDomain: "minimarket-masi-2020.firebaseapp.com",
+            databaseURL: "https://minimarket-masi-2020.firebaseio.com",
+            projectId: "minimarket-masi-2020",
+            storageBucket: "minimarket-masi-2020.appspot.com",
+            messagingSenderId: "626195316599",
+            appId: "1:626195316599:web:21f909f0559987cad6ab72",
+            measurementId: "G-CRXWW8B4Q7"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                // User is signed in.
+                var displayName = user.displayName;
+                var email = user.email;
+                var emailVerified = user.emailVerified;
+                var photoURL = user.photoURL;
+                var isAnonymous = user.isAnonymous;
+                var uid = user.uid;
+                var providerData = user.providerData;
+                document.getElementById('usuario').innerHTML = "Usuario registrado: " + email;
+            } else {
+                document.getElementById('estado').innerHTML = "No Logueado";
+            }
+        });
+
+        function salir() {
+            firebase.auth().signOut().then(function () {
+                window.location = "index.html";
+            }).catch(function (error) {
+                alert(error);
+            })
+        }
+    </script>
+</body>
+
+</html>

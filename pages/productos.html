@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <title>TiendaWEB-Productos</title>
+</head>
+
+
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="../dashboard.html">Tienda WEB</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link active" href="#">Productos <span class="sr-only">(current)</span></a>
+                <a class="nav-item nav-link" href="./ventas.html">Ventas</a>
+                <a class="nav-item nav-link" href="./clientes.html">Clientes</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row d-flex justify-content-between mt-3 mb-3 p-3" style="background-color: #71aec0;">
+            <h5 id="usuario">Usuario registrado:</h5>
+            <input type="button" onclick="salir()" class="btn btn-danger" value="CERRAR SESION">
+
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Codigo</th>
+                    <th scope="col">Precio</th>
+                </tr>
+            </thead>
+            <tbody id="tabla">
+
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-firestore.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-analytics.js"></script>
+
+    <script src="../js/jquery-3.5.1.slim.min.js"></script>
+    <script src="../js/popper.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+
+    <script src="../js/app.js"></script>
+    <script>
+        var contadorTabla = 0;
+        var tabla = document.getElementById('tabla');
+        db.collection("producto").get().then((querySnapshot) => {
+            tabla.innerHTML = " ";
+            contadorTabla = 1;
+            querySnapshot.forEach((doc) => {
+                console.log(`${doc.id} => ${doc.data().nombre}`);
+                tabla.innerHTML += `<tr>
+        <th scope="row">${contadorTabla}</th>
+        <td>${doc.data().nombre}</td>
+        <td>${doc.data().descripcion}</td>
+        <td>${doc.data().codigo}</td>
+        <td>${doc.data().precio}</td>
+    </tr>`;
+                contadorTabla++;
+            });
+        });
+    </script>
+
+</body>
+
+</html>

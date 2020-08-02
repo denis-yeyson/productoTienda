@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <title>TiendaWEB-Escanear</title>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="../dashboard.html">Tienda WEB</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" href="./productos.html">Productos</a>
+                <a class="nav-item nav-link" href="./ventas.html">Ventas</a>
+                <a class="nav-item nav-link" href="./clientes.html">Clientes</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row d-flex justify-content-between mt-3 mb-3 p-3" style="background-color: #71aec0;">
+            <h5 id="usuario">Usuario registrado:</h5>
+            <input type="button" onclick="salir()" class="btn btn-danger" value="CERRAR SESION">
+        </div>
+        <h2>Escanear producto</h2>
+        <div class="form-row">
+            <div class="col-md-12 mb-3">
+                <label for="validationCustom02">Codigo</label>
+                <div class="d-flex">
+                    <input type="text" class="form-control" id="codigo" placeholder="Ingresar codigo" required>
+                    <button type="button" class="ml-2 btn btn-warning" data-toggle="modal"
+                        data-target="#exampleModalCenter">
+                        Escanear
+                    </button>
+                    <button type="button" class="ml-2 btn btn-primary" onclick="buscarProducto()">
+                        Buscar
+                    </button>
+
+                    <div class="modal fade show" id="exampleModalCenter" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalCenterTitle" aria-modal="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalCenterTitle">Escanear codigo barras y QR
+                                    </h5>
+                                    <button id="cerrarModalCamara" type="button" class="close" data-dismiss="modal"
+                                        aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+
+                                    <div id="sourceSelectPanel" style="display:none">
+                                        <label for="sourceSelect">Eleja camara:</label>
+                                        <select id="sourceSelect" class="dropdown-toggle">
+                                        </select>
+                                    </div>
+                                    <div class="borde" style="border: 1px solid #000;
+                                            border-radius: 10px;
+                                            width: 100%;
+                                            height: 300px;
+                                            display: flex;
+                                            justify-content: center;
+                                            align-content: center;
+                                            overflow: hidden;
+                                            ">
+                                        <video id="video"></video>
+                                    </div>
+                                    <pre><code id="result"></code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="invalid-feedback">
+                    Porfavor ingrese el codigo del producto.
+                </div>
+                <div class="valid-feedback">
+                    Correcto!
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h5 class="card-header" id="tituloBusqueda">Producto ...</h5>
+            <div class="card-body">
+                <div class="d-flex">
+                    <label class="font-weight-bold">Nombre:&nbsp;</label>
+                    <label id="nombreProducto"></label>
+                </div>
+                <div class="d-flex">
+                    <label class="font-weight-bold">Descripción:&nbsp;</label>
+                    <label id="descripcionProducto"></label>
+                </div>
+                <div class="d-flex">
+                    <label class="font-weight-bold">Precio:&nbsp;</label>
+                    <label id="precioProducto"></label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-firestore.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-analytics.js"></script>
+
+    <script src="../js/jquery-3.5.1.slim.min.js"></script>
+    <script src="../js/popper.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+
+    <script src="../js/app.js"></script>
+    <script src="../js/barcode.min.js"></script>
+    <script type="text/javascript">
+        window.addEventListener('load', function () {
+            let selectedDeviceId;
+            const codeReader = new ZXing.BrowserMultiFormatReader()
+            console.log('ZXing code reader initialized')
+            codeReader.listVideoInputDevices()
+                .then((videoInputDevices) => {
+                    const sourceSelect = document.getElementById('sourceSelect')
+                    selectedDeviceId = videoInputDevices[0].deviceId
+                    if (videoInputDevices.length >= 1) {
+                        videoInputDevices.forEach((element) => {
+                            const sourceOption = document.createElement('option')
+                            sourceOption.text = element.label
+                            sourceOption.value = element.deviceId
+                            sourceSelect.appendChild(sourceOption)
+                        })
+
+                        sourceSelect.onchange = () => {
+                            selectedDeviceId = sourceSelect.value;
+                        };
+
+                        const sourceSelectPanel = document.getElementById('sourceSelectPanel')
+                        sourceSelectPanel.style.display = 'block'
+                    }
+                    codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (result,
+                        err) => {
+                        if (result) {
+                            console.log(result)
+                            document.getElementById('codigo').value = result.text
+                            document.getElementById('cerrarModalCamara').click();
+                        }
+                        if (err && !(err instanceof ZXing.NotFoundException)) {
+                            console.error(err)
+                            alert(err);
+                            //document.getElementById('codigo').textContent = err
+                        }
+                    });
+
+                })
+                .catch((err) => {
+                    console.error(err)
+                })
+        })
+
+        function buscarProducto() {
+            var codigoProducto = document.getElementById('codigo');
+            var tituloBusqueda = document.getElementById('tituloBusqueda');
+
+            var nombreProducto = document.getElementById('nombreProducto');
+            var descripcionProducto = document.getElementById('descripcionProducto');
+            var precioProducto = document.getElementById('precioProducto');
+
+            db.collection("producto").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    if (doc.data().codigo == codigoProducto.value) {
+                        tituloBusqueda.innerHTML = "Producto encontrado."
+                        nombreProducto.innerHTML = doc.data().nombre;
+                        descripcionProducto.innerHTML = doc.data().descripcion;
+                        precioProducto.innerHTML = doc.data().precio;
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+
+</html>
