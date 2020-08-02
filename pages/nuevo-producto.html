@@ -291,24 +291,29 @@
 
                         sourceSelect.onchange = () => {
                             selectedDeviceId = sourceSelect.value;
+                            ////
+                            codeReader.reset()
+                            document.getElementById('result').textContent = '';
+
+                            codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (result,
+                                err) => {
+                                if (result) {
+                                    console.log(result)
+                                    document.getElementById('codigo').value = result.text
+                                    document.getElementById('cerrarModalCamara').click();
+                                }
+                                if (err && !(err instanceof ZXing.NotFoundException)) {
+                                    console.error(err)
+                                    alert(err);
+                                    //document.getElementById('codigo').textContent = err
+                                }
+                            });
+                            ////
                         };
 
                         const sourceSelectPanel = document.getElementById('sourceSelectPanel')
                         sourceSelectPanel.style.display = 'block'
                     }
-                    codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (result,
-                        err) => {
-                        if (result) {
-                            console.log(result)
-                            document.getElementById('codigo').value = result.text
-                            document.getElementById('cerrarModalCamara').click();
-                        }
-                        if (err && !(err instanceof ZXing.NotFoundException)) {
-                            console.error(err)
-                            alert(err);
-                            //document.getElementById('codigo').textContent = err
-                        }
-                    });
 
                 })
                 .catch((err) => {
