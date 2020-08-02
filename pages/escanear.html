@@ -74,6 +74,10 @@
                                             ">
                                         <video id="video"></video>
                                     </div>
+                                    <a class="button btn btn-primary mt-2" style="color:#fff"
+                                        id="startButton">Actualizar
+                                        camara</a>
+                                    <a class="button btn btn-primary mt-2" style="color:#fff" id="resetButton">Reset</a>
                                     <pre><code id="result"></code></pre>
                                 </div>
                             </div>
@@ -142,7 +146,14 @@
 
                         sourceSelect.onchange = () => {
                             selectedDeviceId = sourceSelect.value;
-                            codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (result,
+                        };
+
+                        const sourceSelectPanel = document.getElementById('sourceSelectPanel')
+                        sourceSelectPanel.style.display = 'block'
+                    }
+
+                    document.getElementById('startButton').addEventListener('click', () => {
+                        codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (result,
                             err) => {
                             if (result) {
                                 console.log(result)
@@ -153,11 +164,16 @@
                                 document.getElementById('result').textContent = err
                             }
                         })
-                        };
+                        console.log(
+                            `Started continous decode from camera with id ${selectedDeviceId}`)
+                    })
 
-                        const sourceSelectPanel = document.getElementById('sourceSelectPanel')
-                        sourceSelectPanel.style.display = 'block'
-                    }
+                    document.getElementById('resetButton').addEventListener('click', () => {
+                        codeReader.reset()
+                        document.getElementById('result').textContent = '';
+                        console.log('Reset.')
+                    })
+
                     codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (result,
                         err) => {
                         if (result) {
@@ -177,6 +193,8 @@
                     console.error(err)
                 })
         })
+
+
 
         function buscarProducto() {
             var codigoProducto = document.getElementById('codigo');
