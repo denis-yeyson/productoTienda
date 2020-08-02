@@ -149,23 +149,6 @@
                             ////
                             codeReader.reset()
                             document.getElementById('result').textContent = '';
-
-                            codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (
-                                result,
-                                err) => {
-                                if (result) {
-
-                                    console.log('Reset.')
-                                    console.log(result)
-                                    document.getElementById('result').textContent =
-                                        result.text
-                                }
-                                if (err && !(err instanceof ZXing
-                                        .NotFoundException)) {
-                                    console.error(err)
-                                    //document.getElementById('result').textContent = err
-                                }
-                            })
                             ////
                         };
 
