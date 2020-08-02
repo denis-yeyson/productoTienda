@@ -77,6 +77,7 @@
                                     <a class="button btn btn-primary mt-2" style="color:#fff"
                                         id="startButton">Actualizar
                                         camara</a>
+                                    <a class="button btn btn-primary mt-2" style="color:#fff" id="resetButton">Reset</a>
                                     <pre><code id="result"></code></pre>
                                 </div>
                             </div>
@@ -145,31 +146,33 @@
 
                         sourceSelect.onchange = () => {
                             selectedDeviceId = sourceSelect.value;
+                            ////
+                            codeReader.reset()
+                            document.getElementById('result').textContent = '';
+
+                            codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (
+                                result,
+                                err) => {
+                                if (result) {
+
+                                    console.log('Reset.')
+                                    console.log(result)
+                                    document.getElementById('result').textContent =
+                                        result.text
+                                }
+                                if (err && !(err instanceof ZXing
+                                        .NotFoundException)) {
+                                    console.error(err)
+                                    //document.getElementById('result').textContent = err
+                                }
+                            })
+                            ////
                         };
 
                         const sourceSelectPanel = document.getElementById('sourceSelectPanel')
                         sourceSelectPanel.style.display = 'block'
                     }
 
-                    document.getElementById('startButton').addEventListener('click', () => {
-                        codeReader.reset()
-                        document.getElementById('result').textContent = '';
-                        
-                        codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (result,
-                            err) => {
-                            if (result) {
-                                
-                                console.log(result)
-                                //document.getElementById('result').textContent = result.text
-                            }
-                            if (err && !(err instanceof ZXing.NotFoundException)) {
-                                console.error(err)
-                                //document.getElementById('result').textContent = err
-                            }
-                        })
-                        console.log(
-                            `Started continous decode from camera with id ${selectedDeviceId}`)
-                    })
 
                     codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (result,
                         err) => {
