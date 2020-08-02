@@ -74,11 +74,7 @@
                                             ">
                                         <video id="video"></video>
                                     </div>
-                                    <a class="button btn btn-primary mt-2" style="color:#fff"
-                                        id="startButton">Actualizar
-                                        camara</a>
-                                    <a class="button btn btn-primary mt-2" style="color:#fff" id="resetButton">Reset</a>
-                                    <pre><code id="result"></code></pre>
+
                                 </div>
                             </div>
                         </div>
@@ -149,27 +145,26 @@
                             ////
                             codeReader.reset()
                             document.getElementById('result').textContent = '';
+
+                            codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (result,
+                                err) => {
+                                if (result) {
+                                    console.log(result)
+                                    document.getElementById('codigo').value = result.text
+                                    document.getElementById('cerrarModalCamara').click();
+                                }
+                                if (err && !(err instanceof ZXing.NotFoundException)) {
+                                    console.error(err)
+                                    alert(err);
+                                    //document.getElementById('codigo').textContent = err
+                                }
+                            });
                             ////
                         };
 
                         const sourceSelectPanel = document.getElementById('sourceSelectPanel')
                         sourceSelectPanel.style.display = 'block'
                     }
-
-
-                    codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (result,
-                        err) => {
-                        if (result) {
-                            console.log(result)
-                            document.getElementById('codigo').value = result.text
-                            document.getElementById('cerrarModalCamara').click();
-                        }
-                        if (err && !(err instanceof ZXing.NotFoundException)) {
-                            console.error(err)
-                            alert(err);
-                            //document.getElementById('codigo').textContent = err
-                        }
-                    });
 
                 })
                 .catch((err) => {
